@@ -1,6 +1,7 @@
 # event_community_organization
 
 A new Flutter project.
+This is an app created for assignment that allows user (Organization/ Student) to publish event, register event, post feeds, comment post.
 
 ## Getting Started
 
