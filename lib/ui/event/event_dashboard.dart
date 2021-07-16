@@ -4,6 +4,7 @@ import 'package:event_community_organization/model/event.dart';
 import 'package:event_community_organization/services/database.dart';
 import 'package:event_community_organization/ui/event/add_event.dart';
 import 'package:event_community_organization/ui/event/customCard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EventDashboard extends StatefulWidget {
@@ -15,13 +16,29 @@ class EventDashboard extends StatefulWidget {
 
 class _EventDashboardState extends State<EventDashboard> {
   final _dbService = Database();
+  final _auth = FirebaseAuth.instance;
+
   int eventNumber = 0;
   int _currentPage = 0;
+
+  String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    identifyUserType();
+  }
+
+  void identifyUserType() async {
+    final result = await _dbService.getUserProfile(_auth.currentUser!.uid);
+    setState(() {
+      userType = result!.userType;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Color(0xFF4B49B6),
       appBar: AppBar(
@@ -36,7 +53,7 @@ class _EventDashboardState extends State<EventDashboard> {
           ),
         ),
         actions: [
-          IconButton(
+           userType != null && userType == 'Organization' ? IconButton(
               onPressed: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => AddEvent()));
@@ -44,7 +61,7 @@ class _EventDashboardState extends State<EventDashboard> {
               icon: Icon(
                 Icons.add_circle_outline_outlined,
                 color: Colors.white,
-              ))
+              )) : Text('')
         ],
       ),
       body: Column(

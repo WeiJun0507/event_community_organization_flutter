@@ -1,9 +1,7 @@
-import 'package:event_community_organization/services/database.dart';
 import 'package:event_community_organization/ui/dashboard/BottomNavigationBar.dart';
 import 'package:event_community_organization/ui/event/event_dashboard.dart';
 import 'package:event_community_organization/ui/post/post_screen.dart';
 import 'package:event_community_organization/ui/profile/profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -14,24 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _auth = FirebaseAuth.instance;
-  final _dbService = Database();
-
-  late String userType;
-
-
-  @override
-  void initState() {
-    identifyUserType();
-    super.initState();
-  }
-
-  void identifyUserType() async {
-    final result = await _dbService.getUserProfile(_auth.currentUser!.uid);
-    setState(() {
-      userType = result!.userType;
-    });
-  }
 
   int _selectedPage =0;
 

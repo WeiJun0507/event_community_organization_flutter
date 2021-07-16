@@ -1,11 +1,36 @@
 import 'package:event_community_organization/model/event.dart';
+import 'package:event_community_organization/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_Event.dart';
 
-class EventDetail extends StatelessWidget {
+class EventDetail extends StatefulWidget {
   final Event event;
   const EventDetail({Key? key, required this.event}) : super(key: key);
+
+  @override
+  _EventDetailState createState() => _EventDetailState();
+}
+
+class _EventDetailState extends State<EventDetail> {
+  final _dbService = Database();
+  final _auth = FirebaseAuth.instance;
+
+  String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    identifyUserType();
+  }
+
+  void identifyUserType() async {
+    final result = await _dbService.getUserProfile(_auth.currentUser!.uid);
+    setState(() {
+      userType = result!.userType;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +47,7 @@ class EventDetail extends StatelessWidget {
                 color: Colors.grey[800],
                 child: Stack(
                   children: [
-                    Center(child: Image.network(event.imagePath, fit: BoxFit.fill,)),
+                    Center(child: Image.network(widget.event.imagePath, fit: BoxFit.fill,)),
                     Positioned(
                       top: 5.0,
                       child: IconButton(
@@ -36,7 +61,7 @@ class EventDetail extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
+                    userType != null && userType == 'Organization' ? Positioned(
                       top: 5.0,
                         right: 5.0,
                         child: IconButton(
@@ -45,13 +70,13 @@ class EventDetail extends StatelessWidget {
                         color: Color(0xFF8FD0CB),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => EditEvent(event: event,)));
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => EditEvent(event: widget.event,)));
                       },
-                    )),
+                    )) : Text(''),
                     Positioned(
                       bottom: 5.0,
                         left: 12.0,
-                        child: Text(event.eventName, style: TextStyle(
+                        child: Text(widget.event.eventName, style: TextStyle(
                           color: Color(0xFF8FD0CB),
                           fontSize: 28.42,
                         ),),
@@ -83,7 +108,7 @@ class EventDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${event.description} ',
+                                  '${widget.event.description} ',
                                   style: TextStyle(
                                     fontSize: 16.0,
                                   ),
@@ -111,7 +136,7 @@ class EventDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${event.eventRequirement}',
+                                  '${widget.event.eventRequirement}',
                                   style: TextStyle(
                                     fontSize: 16.0,
                                   ),
@@ -139,7 +164,7 @@ class EventDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${event.termsAndC}',
+                                  '${widget.event.termsAndC}',
                                   style: TextStyle(
                                     fontSize: 16.0,
                                   ),
@@ -167,7 +192,7 @@ class EventDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${event.venue}',
+                                  '${widget.event.venue}',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -190,7 +215,7 @@ class EventDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${event.date.toString().substring(0, 16)}',
+                                  '${widget.event.date.toString().substring(0, 16)}',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -200,7 +225,9 @@ class EventDetail extends StatelessWidget {
                           ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(onPressed: () {}, child: Text('Register', style: TextStyle(
+                          child: ElevatedButton(onPressed: () {
+                            _dbService.registerEvent(widget.event.o_id, _auth.currentUser!.uid, _auth.currentUser!.displayName!, widget.event.eventName, widget.event.venue, widget.event.date);
+                          }, child: Text('Register', style: TextStyle(
                             fontSize: 16.0,
                           ),), style: ElevatedButton.styleFrom(
                             primary: Color(0xffF16A6A),

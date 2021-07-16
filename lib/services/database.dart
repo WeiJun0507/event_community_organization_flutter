@@ -213,13 +213,13 @@ class Database {
   }
 
   //Register to the event
-  void registerEvent(String o_id, DateTime date, String s_id, String s_name,
-      String title, String venue) {
+  void registerEvent(String o_id, String s_id, String s_name,
+      String eventName, String venue, DateTime date) {
     try {
       Map<String, dynamic> data =
-          RegisterEvent('$s_id $title', s_id, s_name, title, o_id, venue, date)
+          RegisterEvent('$s_id $eventName', s_id, s_name, eventName, o_id, venue, date)
               .toJson();
-      _cloud.collection('Register Event').doc('$s_id $title').set(data);
+      _cloud.collection('Register Event').doc('$s_id $eventName').set(data);
     } catch (e) {
       print(e.toString());
     }
