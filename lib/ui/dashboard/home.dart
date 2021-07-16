@@ -1,12 +1,10 @@
-import 'package:event_community_organization/provider.dart';
-import 'package:event_community_organization/services/auth.dart';
 import 'package:event_community_organization/services/database.dart';
 import 'package:event_community_organization/ui/dashboard/BottomNavigationBar.dart';
 import 'package:event_community_organization/ui/event/event_dashboard.dart';
 import 'package:event_community_organization/ui/post/post_screen.dart';
+import 'package:event_community_organization/ui/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -17,7 +15,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _auth = FirebaseAuth.instance;
-  final _authService = AuthService();
   final _dbService = Database();
 
   late String userType;
@@ -41,7 +38,7 @@ class _HomeState extends State<Home> {
   final List pages= [
     PostScreen(),
     EventDashboard(),
-    null,
+    Profile(),
   ];
 
   @override

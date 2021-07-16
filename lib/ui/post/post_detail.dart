@@ -94,6 +94,7 @@ class _PostDetailState extends State<PostDetail> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
+                          //make real time changes view of likes
                           child: Text("${likes != 0 ? likes : 'Likes'}"),
                         )
                       ],
