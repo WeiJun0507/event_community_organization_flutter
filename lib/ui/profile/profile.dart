@@ -1,11 +1,13 @@
 import 'package:event_community_organization/services/auth.dart';
 import 'package:event_community_organization/ui/profile/Member.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
   Profile({Key? key}) : super(key: key);
 
   final _authService = AuthService();
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class Profile extends StatelessWidget {
                     )),
                 SizedBox(width: 20),
                 Text(
-                  'John',
+                  _auth.currentUser!.displayName!,
                   style: TextStyle(
                     color: Colors.teal[400],
                     letterSpacing: 2,

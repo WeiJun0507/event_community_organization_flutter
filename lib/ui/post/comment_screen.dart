@@ -34,6 +34,8 @@ class _CommentScreenState extends State<CommentScreen> {
   late String comment;
 
 
+
+
   void _commentSection() {
     showDialog(context: context, builder: (context) {
       return Dialog(
@@ -118,6 +120,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    late int likes = widget.likes;
 
     return Scaffold(
       backgroundColor: Colors.teal[100],
@@ -158,7 +161,16 @@ class _CommentScreenState extends State<CommentScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                try {
+                                  _dbService.like(widget.postId);
+                                  setState(() {
+                                    likes += 1;
+                                  });
+                                } catch (e) {
+                                  print(e);
+                                }
+                              },
                               child: Row(
                                 children: <Widget>[
                                   Icon(
@@ -168,7 +180,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child:
-                                        Text("${widget.likes != 0 ? widget.likes : 'Likes'}"),
+                                        Text("${likes != 0 ? likes : 'Likes'}"),
                                   )
                                 ],
                               ),
