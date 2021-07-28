@@ -86,8 +86,8 @@ class _EventDashboardState extends State<EventDashboard> {
                     );
                   }).toList(),
                   options: CarouselOptions(
-                    height: size.height * 0.79,
-                    viewportFraction: 0.83,
+                    height: size.height * 0.81,
+                    viewportFraction: 0.82,
                     enableInfiniteScroll: false,
                     enlargeCenterPage: true,
                     aspectRatio: 21/9,
