@@ -37,7 +37,7 @@ class PostScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (_) => AddPost()));
                     },
                     icon: Icon(Icons.create),
-                    label: Text("Create an Event")),
+                    label: Text("Create a Post")),
               ],
             ),
           ),
